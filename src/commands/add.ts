@@ -16,7 +16,6 @@ import { downloadHook, getAllHooksName } from "../utils/downloadHook";
 const addOptionsSchema = z.object({
   hooks: z.array(z.string()).optional(),
   overwrite: z.boolean(),
-  cwd: z.string(),
   all: z.boolean(),
   path: z.string().optional(),
 });
@@ -26,11 +25,6 @@ export const add = new Command()
   .description("add a hook to your project")
   .argument("[hooks...]", "the hooks to add")
   .option("-o, --overwrite", "overwrite existing files.", false)
-  .option(
-    "-c, --cwd <cwd>",
-    "the working directory. defaults to the current directory.",
-    process.cwd()
-  )
   .option("-a, --all", "add all available hooks", false)
   .option("-p, --path <path>", "the path to add the hook to.")
   .action(async (hooks, opts) => {
@@ -39,13 +33,7 @@ export const add = new Command()
       ...opts,
     });
 
-    const cwd = path.resolve(options.cwd);
-
-    if (!existsSync(cwd)) {
-      logger.error(`The path ${cwd} does not exist. Please try again.`);
-      process.exit(1);
-    }
-
+    // Handle hooks selection
     const allHooks = await getAllHooksName();
 
     let selectedHooks = options.all ? allHooks : options.hooks;
@@ -71,8 +59,29 @@ export const add = new Command()
       process.exit(0);
     }
 
+    // Handle path selection
+    let selectedPath = options.path ?? "";
+
+    if (selectedPath === "") {
+      const { path } = await prompts({
+        type: "text",
+        name: "path",
+        message: "Where would you like to add the hooks?",
+        instructions: false,
+      });
+
+      selectedPath = path;
+    }
+
+    if (!existsSync(selectedPath)) {
+      logger.error(
+        `The path ${selectedPath} does not exist. Please try again.`
+      );
+      process.exit(1);
+    }
+
     for (let i = 0; i < selectedHooks.length; i++) {
       const hook = selectedHooks[i];
-      await downloadHook(hook);
+      await downloadHook(hook, selectedPath);
     }
   });

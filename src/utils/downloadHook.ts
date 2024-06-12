@@ -37,7 +37,7 @@ export const getAllHooksName = async () => {
   }
 };
 
-export const downloadHook = async (hookName: string) => {
+export const downloadHook = async (hookName: string, path: string) => {
   const hookUrl = `https://raw.githubusercontent.com/novajslabs/nova.js/main/src/hooks/${hookName}.ts`;
 
   try {
@@ -50,7 +50,7 @@ export const downloadHook = async (hookName: string) => {
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    await fs.writeFile(`${hookName}.ts`, buffer);
+    await fs.writeFile(`${path}/${hookName}.ts`, buffer);
     console.log(`✅ ${hookName} added`);
   } catch (e) {
     console.log(`❌ ${hookName} error`);
