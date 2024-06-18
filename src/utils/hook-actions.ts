@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import fetch from "node-fetch";
+import { logger } from "@/src/utils/logger";
 
 interface HookList {
   name: string;
@@ -33,7 +34,8 @@ export const getAllHooksName = async () => {
 
     return hooksData.map((hook) => hook.name.replace(".ts", ""));
   } catch (e) {
-    //console.log(`❌ ${hook} error`);
+    logger.error("Error obtaining the list of hooks. Try again.");
+    process.exit(1);
   }
 };
 
@@ -51,8 +53,8 @@ export const downloadHook = async (hookName: string, path: string) => {
     const buffer = Buffer.from(arrayBuffer);
 
     await fs.writeFile(`${path}/${hookName}.ts`, buffer);
-    console.log(`✅ ${hookName} added`);
+    logger.success(`Added ${hookName}`);
   } catch (e) {
-    console.log(`❌ ${hookName} error`);
+    logger.error(`An error occurred adding ${hookName}. Try again.`);
   }
 };

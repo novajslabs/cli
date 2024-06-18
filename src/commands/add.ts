@@ -1,21 +1,14 @@
-import { existsSync, promises as fs } from "fs";
-import path from "path";
-import { getConfig } from "@/src/utils/get-config";
-import { getPackageManager } from "@/src/utils/get-package-manager";
-import { handleError } from "@/src/utils/handle-error";
+import { existsSync } from "fs";
 import { logger } from "@/src/utils/logger";
-import { transform } from "@/src/utils/transformers";
 import chalk from "chalk";
 import { Command } from "commander";
-import { execa } from "execa";
-import ora from "ora";
 import prompts from "prompts";
 import { z } from "zod";
-import { downloadHook, getAllHooksName } from "../utils/downloadHook";
+import { downloadHook, getAllHooksName } from "@/src/utils/hook-actions";
 
 const addOptionsSchema = z.object({
   hooks: z.array(z.string()).optional(),
-  overwrite: z.boolean(),
+  overwrite: z.boolean().optional(),
   all: z.boolean(),
   path: z.string().optional(),
 });
@@ -24,7 +17,7 @@ export const add = new Command()
   .name("add")
   .description("add a hook to your project")
   .argument("[hooks...]", "the hooks to add")
-  .option("-o, --overwrite", "overwrite existing files.", false)
+  .option("-o, --overwrite", "overwrite existing files.")
   .option("-a, --all", "add all available hooks", false)
   .option("-p, --path <path>", "the path to add the hook to.")
   .action(async (hooks, opts) => {
@@ -82,6 +75,29 @@ export const add = new Command()
 
     for (let i = 0; i < selectedHooks.length; i++) {
       const hook = selectedHooks[i];
+
+      // Handle overwrite
+      if (
+        options.overwrite === undefined &&
+        existsSync(`${selectedPath}/${hook}.ts`)
+      ) {
+        const { overwrite } = await prompts({
+          type: "confirm",
+          name: "overwrite",
+          message: `Hook ${hook} already exists. Would you like to overwrite?`,
+          initial: false,
+        });
+
+        if (!overwrite) {
+          logger.info(
+            `Skipped ${hook}. To overwrite, run with the ${chalk.green(
+              "--overwrite"
+            )} flag.`
+          );
+          continue;
+        }
+      }
+
       await downloadHook(hook, selectedPath);
     }
   });
