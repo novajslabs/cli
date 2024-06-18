@@ -1,17 +1,10 @@
 import { existsSync } from "fs";
-import path from "path";
-import { getConfig } from "@/src/utils/get-config";
-import { getPackageManager } from "@/src/utils/get-package-manager";
-import { handleError } from "@/src/utils/handle-error";
 import { logger } from "@/src/utils/logger";
-import { transform } from "@/src/utils/transformers";
 import chalk from "chalk";
 import { Command } from "commander";
-import { execa } from "execa";
-import ora from "ora";
 import prompts from "prompts";
 import { z } from "zod";
-import { downloadHook, getAllHooksName } from "../utils/downloadHook";
+import { downloadHook, getAllHooksName } from "@/src/utils/hook-actions";
 
 const addOptionsSchema = z.object({
   hooks: z.array(z.string()).optional(),

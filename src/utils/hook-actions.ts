@@ -34,7 +34,8 @@ export const getAllHooksName = async () => {
 
     return hooksData.map((hook) => hook.name.replace(".ts", ""));
   } catch (e) {
-    //console.log(`❌ ${hook} error`);
+    logger.error("Error obtaining the list of hooks. Try again.");
+    process.exit(1);
   }
 };
 
