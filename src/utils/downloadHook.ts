@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import fetch from "node-fetch";
+import { logger } from "@/src/utils/logger";
 
 interface HookList {
   name: string;
@@ -51,8 +52,8 @@ export const downloadHook = async (hookName: string, path: string) => {
     const buffer = Buffer.from(arrayBuffer);
 
     await fs.writeFile(`${path}/${hookName}.ts`, buffer);
-    console.log(`✅ ${hookName} added`);
+    logger.success(`Added ${hookName}`);
   } catch (e) {
-    console.log(`❌ ${hookName} error`);
+    logger.error(`An error occurred adding ${hookName}. Try again.`);
   }
 };

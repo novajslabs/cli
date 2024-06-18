@@ -1,4 +1,4 @@
-import { existsSync, promises as fs } from "fs";
+import { existsSync } from "fs";
 import path from "path";
 import { getConfig } from "@/src/utils/get-config";
 import { getPackageManager } from "@/src/utils/get-package-manager";
@@ -83,6 +83,7 @@ export const add = new Command()
     for (let i = 0; i < selectedHooks.length; i++) {
       const hook = selectedHooks[i];
 
+      // Handle overwrite
       if (
         options.overwrite === undefined &&
         existsSync(`${selectedPath}/${hook}.ts`)
@@ -95,7 +96,11 @@ export const add = new Command()
         });
 
         if (!overwrite) {
-          console.log("Skipping");
+          logger.info(
+            `Skipped ${hook}. To overwrite, run with the ${chalk.green(
+              "--overwrite"
+            )} flag.`
+          );
           continue;
         }
       }
