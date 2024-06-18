@@ -15,7 +15,7 @@ import { downloadHook, getAllHooksName } from "../utils/downloadHook";
 
 const addOptionsSchema = z.object({
   hooks: z.array(z.string()).optional(),
-  overwrite: z.boolean(),
+  overwrite: z.boolean().optional(),
   all: z.boolean(),
   path: z.string().optional(),
 });
@@ -24,7 +24,7 @@ export const add = new Command()
   .name("add")
   .description("add a hook to your project")
   .argument("[hooks...]", "the hooks to add")
-  .option("-o, --overwrite", "overwrite existing files.", false)
+  .option("-o, --overwrite", "overwrite existing files.")
   .option("-a, --all", "add all available hooks", false)
   .option("-p, --path <path>", "the path to add the hook to.")
   .action(async (hooks, opts) => {
@@ -82,6 +82,24 @@ export const add = new Command()
 
     for (let i = 0; i < selectedHooks.length; i++) {
       const hook = selectedHooks[i];
+
+      if (
+        options.overwrite === undefined &&
+        existsSync(`${selectedPath}/${hook}.ts`)
+      ) {
+        const { overwrite } = await prompts({
+          type: "confirm",
+          name: "overwrite",
+          message: `Hook ${hook} already exists. Would you like to overwrite?`,
+          initial: false,
+        });
+
+        if (!overwrite) {
+          console.log("Skipping");
+          continue;
+        }
+      }
+
       await downloadHook(hook, selectedPath);
     }
   });
