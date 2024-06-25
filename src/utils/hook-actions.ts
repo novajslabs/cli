@@ -21,7 +21,7 @@ interface HookList {
 
 export const getAllHooksName = async () => {
   const allHooksUrl =
-    "https://api.github.com/repos/novajslabs/nova.js/contents/src/hooks";
+    "https://api.github.com/repos/novajslabs/nova.js/contents/src/hooks/ts";
 
   try {
     const response = await fetch(allHooksUrl);
@@ -39,8 +39,12 @@ export const getAllHooksName = async () => {
   }
 };
 
-export const downloadHook = async (hookName: string, path: string) => {
-  const hookUrl = `https://raw.githubusercontent.com/novajslabs/nova.js/main/src/hooks/${hookName}.ts`;
+export const downloadHook = async (
+  hookName: string,
+  path: string,
+  type: "ts" | "js"
+) => {
+  const hookUrl = `https://raw.githubusercontent.com/novajslabs/nova.js/main/src/hooks/${type}/${hookName}.${type}`;
 
   try {
     const response = await fetch(hookUrl);
@@ -52,7 +56,7 @@ export const downloadHook = async (hookName: string, path: string) => {
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    await fs.writeFile(`${path}/${hookName}.ts`, buffer);
+    await fs.writeFile(`${path}/${hookName}.${type}`, buffer);
     logger.success(`Added ${hookName}`);
   } catch (e) {
     logger.error(`An error occurred adding ${hookName}. Try again.`);
