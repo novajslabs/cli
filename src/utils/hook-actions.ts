@@ -50,7 +50,11 @@ export const downloadHook = async (
     const response = await fetch(hookUrl);
 
     if (!response.ok) {
-      throw Error;
+      if (response.status === 404) {
+        throw new Error(`The ${hookName} hook does not exist.`);
+      } else {
+        throw new Error(`An error occurred adding ${hookName}. Try again.`);
+      }
     }
 
     const arrayBuffer = await response.arrayBuffer();
@@ -59,6 +63,6 @@ export const downloadHook = async (
     await fs.writeFile(`${path}/${hookName}.${type}`, buffer);
     logger.success(`Added ${hookName}`);
   } catch (e) {
-    logger.error(`An error occurred adding ${hookName}. Try again.`);
+    logger.error(e);
   }
 };
