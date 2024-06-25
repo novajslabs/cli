@@ -11,15 +11,17 @@ const addOptionsSchema = z.object({
   overwrite: z.boolean().optional(),
   all: z.boolean(),
   path: z.string().optional(),
+  typescript: z.boolean().optional(),
 });
 
 export const add = new Command()
   .name("add")
   .description("add a hook to your project")
   .argument("[hooks...]", "the hooks to add")
-  .option("-o, --overwrite", "overwrite existing files.")
+  .option("-o, --overwrite", "overwrite existing files")
   .option("-a, --all", "add all available hooks", false)
-  .option("-p, --path <path>", "the path to add the hook to.")
+  .option("-p, --path <path>", "the path to add the hook to")
+  .option("-t, --ts", "add hook in typescript")
   .action(async (hooks, opts) => {
     const options = addOptionsSchema.parse({
       hooks,
@@ -73,13 +75,45 @@ export const add = new Command()
       process.exit(1);
     }
 
+    // Handle TypeScript or JavaScript
+    let extension;
+
+    if (!options.typescript) {
+      const { type } = await prompts({
+        type: "select",
+        name: "type",
+        message: "TypeScript or JavaScript?",
+        hint: "Space or Enter to submit.",
+        instructions: false,
+        choices: [
+          {
+            title: "TypeScript",
+            value: "ts",
+          },
+          {
+            title: "JavaScript",
+            value: "js",
+          },
+        ],
+      });
+
+      if (!type) {
+        logger.warn("No type selected. Exiting.");
+        process.exit(0);
+      }
+
+      extension = type;
+    } else {
+      extension = "ts";
+    }
+
     for (let i = 0; i < selectedHooks.length; i++) {
       const hook = selectedHooks[i];
 
       // Handle overwrite
       if (
         options.overwrite === undefined &&
-        existsSync(`${selectedPath}/${hook}.ts`)
+        existsSync(`${selectedPath}/${hook}.${extension}`)
       ) {
         const { overwrite } = await prompts({
           type: "confirm",
@@ -98,6 +132,6 @@ export const add = new Command()
         }
       }
 
-      await downloadHook(hook, selectedPath);
+      await downloadHook(hook, selectedPath, extension);
     }
   });
