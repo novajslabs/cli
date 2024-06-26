@@ -21,7 +21,7 @@ export const add = new Command()
   .option("-o, --overwrite", "overwrite existing files")
   .option("-a, --all", "add all available hooks", false)
   .option("-p, --path <path>", "the path to add the hook to")
-  .option("-t, --ts", "add hook in typescript")
+  .option("-t, --typescript", "add hook in typescript")
   .action(async (hooks, opts) => {
     const options = addOptionsSchema.parse({
       hooks,
@@ -78,7 +78,7 @@ export const add = new Command()
     // Handle TypeScript or JavaScript
     let extension;
 
-    if (!options.typescript) {
+    if (options.typescript === undefined) {
       const { type } = await prompts({
         type: "select",
         name: "type",
