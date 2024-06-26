@@ -2,6 +2,16 @@
   "name": "@novajslabs/cli",
   "version": "0.1.0",
   "description": "Add hooks to your React project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/novajslabs/cli"
+  },
+  "keywords": [
+    "react",
+    "hook",
+    "hooks"
+  ],
+  "author": "Daniel Castillo <daniel@dlcastillop.com>",
   "license": "MIT",
   "files": [
     "dist"
