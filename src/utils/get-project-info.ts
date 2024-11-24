@@ -14,5 +14,19 @@ export const getProjectLanguageExtension = () => {
 export const isProjectUsingReact = () => {
     const dependencies = getPackageDependencies();
 
-    return dependencies.react && dependencies["react-dom"]
+    return Boolean(dependencies.react && dependencies["react-dom"])
+}
+
+export const getProjectTechStack = () => {
+    const dependencies = getPackageDependencies();
+
+    if (dependencies.vite) {
+        return "vite";
+    } else if (dependencies.next) {
+        return "next";
+    } else if (dependencies.astro) {
+        return "astro";
+    }
+
+    return undefined;
 }
