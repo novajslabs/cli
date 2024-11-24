@@ -4,7 +4,8 @@ import chalk from "chalk";
 import {Command} from "commander";
 import prompts from "prompts";
 import {z} from "zod";
-import {downloadHook, getAllHooksName} from "@/src/utils/hook-actions";
+import {downloadHook} from "@/src/utils/hook-actions";
+import {ALL_HOOKS} from "@/src/utils/constants";
 
 const addOptionsSchema = z.object({
     hooks: z.array(z.string()).optional(),
@@ -29,18 +30,16 @@ export const add = new Command()
         });
 
         // Handle hooks selection
-        const allHooks = await getAllHooksName();
+        let selectedHooks = options.all ? ALL_HOOKS : options.hooks;
 
-        let selectedHooks = options.all ? allHooks : options.hooks;
-
-        if (!options.hooks?.length && !options.all && allHooks) {
+        if (!options.hooks?.length && !options.all && ALL_HOOKS) {
             const {hooks} = await prompts({
                 type: "multiselect",
                 name: "hooks",
                 message: "Which hooks would you like to add?",
                 hint: "Space to select. A to toggle all. Enter to submit.",
                 instructions: false,
-                choices: allHooks.map((entry) => ({
+                choices: ALL_HOOKS.map((entry) => ({
                     title: entry,
                     value: entry,
                     selected: options.all ? true : options.hooks?.includes(entry),

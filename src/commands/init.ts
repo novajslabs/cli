@@ -1,5 +1,5 @@
 import {Command} from "commander";
-import {downloadHook, getAllHooksName} from "@/src/utils/hook-actions";
+import {downloadHook} from "@/src/utils/hook-actions";
 import {
     getProjectLanguageExtension,
     isProjectUsingReact,
@@ -14,6 +14,7 @@ import {z} from "zod";
 import {existsSync} from "fs";
 import chalk from "chalk";
 import prompts from "prompts";
+import {ALL_HOOKS} from "@/src/utils/constants";
 
 const DEFAULT_PATH = "src/hooks";
 const APP_WITHOUT_SRC_PATH = "app/hooks";
@@ -59,7 +60,6 @@ export const init = new Command()
         }
 
         const extension = getProjectLanguageExtension();
-        const allHooks = await getAllHooksName();
 
         try {
             await mkdirp(path);
@@ -70,7 +70,7 @@ export const init = new Command()
 
         const spinner = ora("Adding hooks...").start();
 
-        for (const hook of allHooks) {
+        for (const hook of ALL_HOOKS) {
             // Handle overwrite
             if (
                 options.overwrite === undefined &&
