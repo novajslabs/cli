@@ -2,3 +2,4 @@ components
 dist
 .turbo
 node_modules
+.idea

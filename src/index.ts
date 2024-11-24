@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { add } from "@/src/commands/add";
+import { add, vite } from "@/src/commands";
 import { Command } from "commander";
 
 import { getPackageInfo } from "./utils/get-package-info";
@@ -19,7 +19,7 @@ async function main() {
       "display the version number"
     );
 
-  program.addCommand(add);
+  program.addCommand(add).addCommand(vite);
 
   program.parse();
 }
