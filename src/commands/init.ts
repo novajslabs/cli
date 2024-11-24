@@ -21,12 +21,14 @@ const PAGES_WITHOUT_SRC_PATH = "pages/hooks";
 
 const addOptionsSchema = z.object({
     overwrite: z.boolean().optional(),
+    path: z.string().optional(),
 });
 
 export const init = new Command()
     .name("init")
     .description("add React hooks to your Vite, Next.js or Astro project")
     .option("-o, --overwrite", "overwrite existing files")
+    .option("-p, --path <path>", "the path to add the hook to")
     .action(async (opts) => {
         const options = addOptionsSchema.parse({
             ...opts,
@@ -46,8 +48,8 @@ export const init = new Command()
             }
         }
 
-        let path = DEFAULT_PATH;
-        if (projectTechStack === "next") {
+        let path = options.path ?? DEFAULT_PATH;
+        if (projectTechStack === "next" && !options.path) {
             const isUsingSrcDir = isProjectUsingSrcDir();
 
             if (!isUsingSrcDir) {
