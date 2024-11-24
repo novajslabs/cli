@@ -7,3 +7,12 @@ export const getPackageInfo = () => {
 
     return fs.readJSONSync(packageJsonPath) as PackageJson
 }
+
+export const getPackageDependencies = () => {
+    const packageInfo = getPackageInfo();
+    
+    return {
+        ...packageInfo.dependencies,
+        ...packageInfo.devDependencies,
+    };
+}

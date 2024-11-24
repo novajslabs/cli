@@ -1,16 +1,18 @@
-import {getPackageInfo} from "@/src/utils/get-package-info";
+import {getPackageDependencies} from "@/src/utils/get-package-info";
 
 export const getProjectLanguageExtension = () => {
     let extension: "ts" | "js" = "js";
-    const packageInfo = getPackageInfo();
-    const dependencies = {
-        ...packageInfo.dependencies,
-        ...packageInfo.devDependencies,
-    };
+    const dependencies = getPackageDependencies();
 
     if (dependencies.typescript) {
         extension = "ts";
     }
 
     return extension;
+}
+
+export const isProjectUsingReact = () => {
+    const dependencies = getPackageDependencies();
+
+    return dependencies.react && dependencies["react-dom"]
 }

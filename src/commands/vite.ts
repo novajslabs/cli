@@ -1,15 +1,22 @@
 import {Command} from "commander";
 import {downloadHook, getAllHooksName} from "@/src/utils/hook-actions";
-import {getProjectLanguageExtension} from "@/src/utils/get-project-info";
+import {getProjectLanguageExtension, isProjectUsingReact} from "@/src/utils/get-project-info";
 import {mkdirp} from "fs-extra";
 import {logger} from "@/src/utils/logger";
 import ora from "ora"
+
+const PATH_FOR_HOOKS = "src/hooks";
 
 export const vite = new Command()
     .name("vite")
     .description("add hooks to your Vite + React project")
     .action(async () => {
-        const PATH_FOR_HOOKS = "src/hooks";
+        const isUsingReact = isProjectUsingReact();
+        if (!isUsingReact) {
+            logger.error("The project is not using React. Exiting.");
+            process.exit(1);
+        }
+
 
         const extension = getProjectLanguageExtension();
         const allHooks = await getAllHooksName();
