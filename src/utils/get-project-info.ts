@@ -1,4 +1,5 @@
 import {getPackageDependencies} from "@/src/utils/get-package-info";
+import {existsSync} from "fs";
 
 export const getProjectLanguageExtension = () => {
     let extension: "ts" | "js" = "js";
@@ -29,4 +30,12 @@ export const getProjectTechStack = () => {
     }
 
     return undefined;
+}
+
+export const isProjectUsingAppRouter = () => {
+    return existsSync("src/app") || existsSync("app");
+}
+
+export const isProjectUsingSrcDir = () => {
+    return existsSync("src");
 }
