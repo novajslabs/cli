@@ -21,14 +21,14 @@ export const isProjectUsingReact = () => {
 export const getProjectTechStack = () => {
     const dependencies = getPackageDependencies();
 
-    if (dependencies.vite) {
-        return "vite";
-    } else if (dependencies.next) {
+    if (dependencies.next) {
         return "next";
     } else if (dependencies.astro) {
         return "astro";
     } else if (dependencies["@remix-run/react"]) {
         return "remix";
+    } else if (dependencies.vite) {
+        return "vite";
     } else if (dependencies.gatsby) {
         return "gatsby";
     }
