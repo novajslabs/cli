@@ -45,7 +45,8 @@ export const init = new Command()
         let path = options.path ?? SRC_PATH;
 
         switch (projectTechStack) {
-            case ("astro" || "vite"):
+            case "astro":
+            case "vite":
                 const isUsingReact = isProjectUsingReact();
                 if (!isUsingReact) {
                     logger.error("The project is not using React. Exiting.");
