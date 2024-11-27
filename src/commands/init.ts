@@ -16,18 +16,20 @@ import chalk from "chalk";
 import prompts from "prompts";
 import {ALL_HOOKS} from "@/src/utils/constants";
 
-const DEFAULT_PATH = "src/hooks";
-const APP_WITHOUT_SRC_PATH = "app/hooks";
-const PAGES_WITHOUT_SRC_PATH = "pages/hooks";
+const SRC_PATH = "src/hooks";
+const APP_PATH = "app/hooks";
+const PAGES_PATH = "pages/hooks";
 
 const addOptionsSchema = z.object({
     overwrite: z.boolean().optional(),
     path: z.string().optional(),
 });
 
+// AÑADIR GATSBY, tanstack start
+
 export const init = new Command()
     .name("init")
-    .description("add React hooks to your Vite, Next.js or Astro project")
+    .description("add React hooks to your Vite, Next.js, Astro and Remix project")
     .option("-o, --overwrite", "overwrite existing files")
     .option("-p, --path <path>", "the path to add the hook to")
     .action(async (opts) => {
@@ -41,25 +43,38 @@ export const init = new Command()
             process.exit(1);
         }
 
-        if (projectTechStack === "vite" || projectTechStack === "astro") {
-            const isUsingReact = isProjectUsingReact();
-            if (!isUsingReact) {
-                logger.error("The project is not using React. Exiting.");
-                process.exit(1);
-            }
-        }
-
-        let path = options.path ?? DEFAULT_PATH;
-        if (projectTechStack === "next" && !options.path) {
-            const isUsingSrcDir = isProjectUsingSrcDir();
-
-            if (!isUsingSrcDir) {
-                const isUsingAppRouter = isProjectUsingAppRouter();
-                path = isUsingAppRouter ? APP_WITHOUT_SRC_PATH : PAGES_WITHOUT_SRC_PATH;
-            }
-        }
-
         const extension = getProjectLanguageExtension();
+        let path = options.path ?? SRC_PATH;
+
+        switch (projectTechStack) {
+            case ("astro" || "vite"):
+                const isUsingReact = isProjectUsingReact();
+                if (!isUsingReact) {
+                    logger.error("The project is not using React. Exiting.");
+                    process.exit(1);
+                }
+                break;
+
+            case "next":
+                if (!options.path) {
+                    const isUsingSrcDir = isProjectUsingSrcDir();
+
+                    if (!isUsingSrcDir) {
+                        const isUsingAppRouter = isProjectUsingAppRouter();
+                        path = isUsingAppRouter ? APP_PATH : PAGES_PATH;
+                    }
+                }
+                break;
+
+            case "remix":
+                if (!options.path) {
+                    path = APP_PATH;
+                }
+                break;
+
+            default:
+                break;
+        }
 
         try {
             await mkdirp(path);
