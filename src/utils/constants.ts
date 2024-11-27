@@ -1,0 +1,20 @@
+export const ALL_HOOKS = [
+    'useArray', 'useAudio',
+    'useBattery', 'useClipboard',
+    'useCountdown', 'useCountup',
+    'useDebounce', 'useDownload',
+    'useEventListener', 'useFavicon',
+    'useFetch', 'useFirstRender',
+    'useFirstVisit', 'useGeolocation',
+    'useHover', 'useInput',
+    'useIsTouchDevice', 'useKeyPress',
+    'useLang', 'useLocalStorage',
+    'useNavigatorShare', 'useOffline',
+    'useOnScreen', 'useOutsideClick',
+    'usePrevious', 'useRandomColor',
+    'useScript', 'useScroll',
+    'useSearchParams', 'useStopwatch',
+    'useTimer', 'useTitle',
+    'useToggle', 'useVideo',
+    'useWindowSize'
+]
