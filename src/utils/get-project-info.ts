@@ -29,6 +29,8 @@ export const getProjectTechStack = () => {
         return "astro";
     } else if (dependencies["@remix-run/react"]) {
         return "remix";
+    } else if (dependencies.gatsby) {
+        return "gatsby";
     }
 
     return undefined;

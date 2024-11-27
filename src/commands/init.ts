@@ -25,11 +25,9 @@ const addOptionsSchema = z.object({
     path: z.string().optional(),
 });
 
-// AÑADIR GATSBY, tanstack start
-
 export const init = new Command()
     .name("init")
-    .description("add React hooks to your Vite, Next.js, Astro and Remix project")
+    .description("add React hooks to your Vite, Next.js, Astro, Remix and Gatsby project")
     .option("-o, --overwrite", "overwrite existing files")
     .option("-p, --path <path>", "the path to add the hook to")
     .action(async (opts) => {
