@@ -1,6 +1,6 @@
 {
   "name": "@novajslabs/cli",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A CLI to add hooks to your React project",
   "repository": {
     "type": "git",
