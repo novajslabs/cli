@@ -21,6 +21,7 @@ export const ALL_HOOKS = [
   "useKeyPress",
   "useLang",
   "useLocalStorage",
+  "useMousePosition",
   "useNavigatorShare",
   "useOffline",
   "useOnScreen",
