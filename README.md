@@ -1,10 +1,10 @@
 # Nova.js CLI
 
-A CLI to add hooks to your React project.
+A CLI to add dependency-free React hooks to your project.
 
 ## Getting started
 
-Please follow the documentation at [novajs.co/cli](https://novajs.co/cli).
+Please follow the documentation at [novajs.dev/cli](https://novajs.dev/cli).
 
 ## Questions
 
@@ -20,11 +20,11 @@ Star this repo.
 
 ### Share
 
-- [LinkedIn](http://www.linkedin.com/shareArticle?mini=true&url=https://novajs.co)
-- [WhatsApp](https://api.whatsapp.com/send?text=https://novajs.co)
-- [Facebook](https://www.facebook.com/sharer/sharer.php?u=https://novajs.co)
-- [X](https://twitter.com/intent/tweet?url=https://novajs.co)
-- [Reddit](https://www.reddit.com/submit?url=https://novajs.co)
+- [LinkedIn](http://www.linkedin.com/shareArticle?mini=true&url=https://novajs.dev/cli)
+- [WhatsApp](https://api.whatsapp.com/send?text=https://novajs.dev/cli)
+- [Facebook](https://www.facebook.com/sharer/sharer.php?u=https://novajs.dev/cli)
+- [X](https://twitter.com/intent/tweet?url=https://novajs.dev/cli)
+- [Reddit](https://www.reddit.com/submit?url=https://novajs.dev/cli)
 
 ## License
 
